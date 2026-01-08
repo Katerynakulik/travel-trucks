@@ -1,0 +1,30 @@
+.header {
+  width: 100%;
+  background-color: var(--white);
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 64px;
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  margin-left: 450px;
+  display: flex;
+  gap: 32px;
+}
+
+.navLink {
+  font-weight: 500;
+  color: var(--main-dark);
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: var(--main-red);
+}
