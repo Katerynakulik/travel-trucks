@@ -40,13 +40,13 @@ main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding: 48px 64px;
 }
 
 .container {
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 64px;
 }
 
 .page-title {

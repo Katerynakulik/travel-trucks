@@ -1,22 +1,36 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useCamperStore } from "@/store/useCamperStore"; // Імпорт нашого стору
 import { CamperCard } from "../CamperCard/CamperCard";
 import styles from "./CamperList.module.css";
 
 export const CamperList = () => {
-  const [campers, setCampers] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [total, setTotal] = useState(0); // Зберігаємо загальну кількість для ліміту
-
   const searchParams = useSearchParams();
   const LIMIT = 4;
 
+  // Отримуємо дані та методи з Zustand
+  const {
+    items,
+    total,
+    isLoading,
+    setItems,
+    setTotal,
+    setLoading,
+    resetItems,
+  } = useCamperStore();
+
+  // Локальний стан для пагінації залишаємо, бо це стосується тільки цього списку
+  const [page, setPage] = useState(1);
+
   const fetchCampers = useCallback(
     async (currentPage: number, isNewSearch: boolean) => {
-      setIsLoading(true);
+      setLoading(true);
+
+      // Вимога ТЗ: перед новим пошуком скидаємо результати
+      if (isNewSearch) resetItems();
+
       try {
         const url = new URL(
           "https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers"
@@ -24,72 +38,56 @@ export const CamperList = () => {
         url.searchParams.append("page", currentPage.toString());
         url.searchParams.append("limit", LIMIT.toString());
 
-        // Додаємо фільтри з URL
         searchParams.forEach((value, key) => {
           if (value) url.searchParams.append(key, value);
         });
 
         const res = await fetch(url.toString());
 
-        // Якщо MockAPI повертає 404 (нічого не знайдено), обнуляємо список
         if (res.status === 404) {
-          if (isNewSearch) setCampers([]);
-          setTotal(0);
-          return;
+          return; // Zustand вже скинув items через resetItems()
         }
 
         const data = await res.json();
-        const items = Array.isArray(data) ? data : data.items || [];
+        const newItems = Array.isArray(data) ? data : data.items || [];
 
-        // Встановлюємо загальну кількість (MockAPI зазвичай повертає total в об'єкті)
-        // Якщо total немає, використовуємо 32 (загальна кількість у базі)
+        // Записуємо дані в глобальний стор
+        setItems(newItems, isNewSearch);
         setTotal(data.total || 32);
-
-        setCampers((prev) => {
-          if (isNewSearch) return items; // Для нового пошуку замінюємо масив
-
-          // Фільтруємо нові дані, щоб уникнути помилки дублікатів ключів (key error)
-          const uniqueItems = items.filter(
-            (newItem) => !prev.some((oldItem) => oldItem.id === newItem.id)
-          );
-          return [...prev, ...uniqueItems];
-        });
       } catch (error) {
         console.error("Fetch error:", error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     },
-    [searchParams]
+    [searchParams, setLoading, setItems, setTotal, resetItems]
   );
 
-  // Викликається при зміні фільтрів (Search)
+  // Реакція на зміну фільтрів
   useEffect(() => {
     setPage(1);
     fetchCampers(1, true);
   }, [searchParams, fetchCampers]);
 
-  // Викликається при натисканні Load More (зміна сторінки)
+  // Реакція на Load More
   useEffect(() => {
     if (page > 1) {
       fetchCampers(page, false);
     }
   }, [page, fetchCampers]);
 
-  // Логіка показу кнопки: є дані, і їх менше ніж загальна кількість
-  const hasMore = campers.length > 0 && campers.length < total;
+  const hasMore = items.length > 0 && items.length < total;
 
   return (
     <div className={styles.container}>
       <div className={styles.list}>
-        {campers.map((camper) => (
+        {items.map((camper) => (
           <CamperCard key={camper.id} camper={camper} />
         ))}
       </div>
 
       {isLoading && <p>Loading...</p>}
 
-      {/* Показуємо кнопку лише якщо не вантажимо і є що ще показати */}
       {hasMore && !isLoading && (
         <button
           className={styles.loadMoreBtn}
