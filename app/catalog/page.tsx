@@ -11,8 +11,7 @@ export default async function CatalogPage() {
   return (
     <div className="container">
       <section className={styles.catalogSection}>
-        <h1 className="page-title">Explore our campers</h1>
-
+        <h1 className="page-title hidden">Explore our campers</h1>
         <div className={styles.layout}>
           <Filters />
 

@@ -47,3 +47,6 @@
 .button:active {
   background-color: var(--main-red-hover);
 }
+hidden {
+  display: none;
+}
