@@ -36,3 +36,24 @@ button {
   border: none;
   outline: none;
 }
+main {
+   padding-top: 72px; 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--main-dark);
+  margin-bottom: 32px;
+}
