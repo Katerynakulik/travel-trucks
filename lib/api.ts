@@ -16,3 +16,13 @@ export const getCampers = async () => {
     throw error;
   }
 };
+
+export const getCamperById = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/campers/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching camper with id ${id}:`, error);
+    throw error;
+  }
+};
