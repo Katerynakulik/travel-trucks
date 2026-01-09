@@ -1,21 +1,20 @@
 import styles from "./catalog.module.css";
+import { getCampers } from "@/lib/api";
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const campers = await getCampers();
   return (
     <div className="container">
-      <section className={styles.catalogSection}>
-        <h1 className="page-title">Our Campers</h1>
-
-        <div className={styles.layout}>
-          <aside className={styles.filters}>
-            <p>Filters will be here</p>
-          </aside>
-
-          <div className={styles.list}>
-            <p>Camper cards will be here</p>
-          </div>
-        </div>
-      </section>
+      <h1 className="page-title">Explore our campers</h1>
+      <div className={styles.layout}>
+        <section className={styles.list}>
+          {campers.items.map((camper: any) => (
+            <div key={camper.id} className="card">
+              {camper.name} - {camper.price}
+            </div>
+          ))}
+        </section>
+      </div>
     </div>
   );
 }
