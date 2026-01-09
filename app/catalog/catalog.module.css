@@ -1,20 +1,48 @@
-.catalogSection {
-  padding: 40px 0;
+.container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 64px;
 }
-
 .layout {
   display: flex;
   gap: 64px;
+  align-items: flex-start;
+  justify-content: flex-start; /* Додаємо це, щоб притиснути все до лівого краю */
+  width: 100%; /* Гарантуємо повну ширину */
 }
 
-.list {
+.content {
   flex-grow: 1;
+  min-width: 0; /* Важливо для флекс-контейнерів */
   display: flex;
   flex-direction: column;
-  gap: 32px;
 }
-.tempCard {
-  border: 1px solid rgba(16, 24, 40, 0.2);
-  padding: 24px;
-  border-radius: 20px;
+
+.sidebar {
+  width: 360px;
+  flex-shrink: 0;
+  position: sticky; /* Щоб фільтри не втікали при скролі списку */
+  top: 20px;
+}
+
+.loader {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--main-dark);
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* Адаптивність для планшетів */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+  }
 }

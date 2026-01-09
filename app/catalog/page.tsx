@@ -1,26 +1,28 @@
-import styles from "./catalog.module.css";
-import { getCampers } from "@/lib/api";
+import { Suspense } from "react";
 import { Filters } from "@/components/Filters/Filters";
-import { CamperCard } from "@/components/CamperCard/CamperCard";
 import { CamperList } from "@/components/CamperList/CamperList";
-
-export default async function CatalogPage() {
-  const data = await getCampers();
-
-  const campers = data.items || data;
-
+import styles from "./catalog.module.css";
+// Створюємо окремий клієнтський компонент для контенту, щоб ізолювати Suspense
+function CatalogContent() {
   return (
-    <div className="container">
-      <section className={styles.catalogSection}>
-        <h1 className="page-title hidden">Explore our campers</h1>
-        <div className={styles.layout}>
-          <Filters />
-
-          <section className={styles.list}>
-            <CamperList />
-          </section>
-        </div>
+    <div className={styles.layout}>
+      <aside className={styles.sidebar}>
+        <Filters />
+      </aside>
+      <section className={styles.content}>
+        <CamperList />
       </section>
     </div>
+  );
+}
+
+export default function CatalogPage() {
+  return (
+    <main className={styles.container}>
+      {/* Огортаємо ВСЕ, що залежить від URL, в один Suspense */}
+      <Suspense fallback={<div className={styles.loader}>Loading...</div>}>
+        <CatalogContent />
+      </Suspense>
+    </main>
   );
 }
