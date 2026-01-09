@@ -2,6 +2,7 @@ import styles from "./catalog.module.css";
 import { getCampers } from "@/lib/api";
 import { Filters } from "@/components/Filters/Filters";
 import { CamperCard } from "@/components/CamperCard/CamperCard";
+import { CamperList } from "@/components/CamperList/CamperList";
 
 export default async function CatalogPage() {
   const data = await getCampers();
@@ -16,9 +17,7 @@ export default async function CatalogPage() {
           <Filters />
 
           <section className={styles.list}>
-            {campers.map((camper: any) => (
-              <CamperCard key={camper.id} camper={camper} />
-            ))}
+            <CamperList />
           </section>
         </div>
       </section>

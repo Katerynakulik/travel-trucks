@@ -1,9 +1,15 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "../Icon/Icon";
 import styles from "./CamperCard.module.css";
 
 export const CamperCard = ({ camper }: { camper: any }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
   // Мапа для типів кузова
   const formIcons: Record<string, string> = {
     alcove: "bi_grid-3x3-gap",
@@ -36,7 +42,14 @@ export const CamperCard = ({ camper }: { camper: any }) => {
             <h2 className={styles.name}>{camper.name}</h2>
             <div className={styles.priceRow}>
               <span className={styles.price}>€{camper.price.toFixed(2)}</span>
-              <button className={styles.favoriteBtn}>
+              <button
+                type="button"
+                className={`${styles.favoriteBtn} ${
+                  isFavorite ? styles.active : ""
+                }`}
+                onClick={toggleFavorite}
+                aria-label="Add to favorites"
+              >
                 <Icon id="heart" width={26} height={24} />
               </button>
             </div>

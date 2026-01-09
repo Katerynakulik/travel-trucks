@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { CamperCard } from "../CamperCard/CamperCard";
 import styles from "./CamperList.module.css";
 
-const LIMIT = 10;
+const LIMIT = 5;
 export const CamperList = () => {
   const [campers, setCampers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
