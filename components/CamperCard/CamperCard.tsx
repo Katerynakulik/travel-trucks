@@ -1,15 +1,20 @@
 "use client";
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "../Icon/Icon";
 import styles from "./CamperCard.module.css";
+import { useCamperStore } from "@/store/useCamperStore";
+import { Camper } from "@/types/camper";
 
-export const CamperCard = ({ camper }: { camper: any }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
+// Визначаємо інтерфейс пропсів згідно з твоїм типом Camper
+interface CamperCardProps {
+  camper: Camper;
+}
+
+export const CamperCard = ({ camper }: CamperCardProps) => {
+  const { favorites, toggleFavorite } = useCamperStore();
+  const isFavorite = favorites.includes(camper.id);
+
   // Мапа для типів кузова
   const formIcons: Record<string, string> = {
     alcove: "bi_grid-3x3-gap",
@@ -41,16 +46,22 @@ export const CamperCard = ({ camper }: { camper: any }) => {
           <div className={styles.titleRow}>
             <h2 className={styles.name}>{camper.name}</h2>
             <div className={styles.priceRow}>
+              {/* Використовуємо .toFixed(2) як вимагає ТЗ */}
               <span className={styles.price}>€{camper.price.toFixed(2)}</span>
               <button
                 type="button"
-                className={`${styles.favoriteBtn} ${
-                  isFavorite ? styles.active : ""
-                }`}
-                onClick={toggleFavorite}
-                aria-label="Add to favorites"
+                className={styles.favoriteBtn}
+                onClick={() => toggleFavorite(camper.id)}
+                aria-label="Add to favorite"
               >
-                <Icon id="heart" width={26} height={24} />
+                <Icon
+                  id="heart"
+                  width={24}
+                  height={24}
+                  className={
+                    isFavorite ? styles.heartActive : styles.heartDefault
+                  }
+                />
               </button>
             </div>
           </div>
@@ -69,22 +80,22 @@ export const CamperCard = ({ camper }: { camper: any }) => {
         <p className={styles.description}>{camper.description}</p>
 
         <div className={styles.features}>
-          {/* Тип кузова */}
+          {/* Тип кузова (Повернуто на місце) */}
           <span className={styles.tag}>
-            <Icon id={formIcons[camper.form]} />
+            <Icon id={formIcons[camper.form]} width={20} height={20} />
             {formatForm(camper.form)}
           </span>
 
           {/* Трансмісія */}
           <span className={styles.tag}>
-            <Icon id="diagram" />
+            <Icon id="diagram" width={20} height={20} />
             {camper.transmission === "automatic" ? "Automatic" : "Manual"}
           </span>
 
           {/* Кондиціонер */}
           {camper.AC && (
             <span className={styles.tag}>
-              <Icon id="wind" />
+              <Icon id="wind" width={20} height={20} />
               AC
             </span>
           )}
@@ -92,7 +103,7 @@ export const CamperCard = ({ camper }: { camper: any }) => {
           {/* Кухня */}
           {camper.kitchen && (
             <span className={styles.tag}>
-              <Icon id="cup-hot" />
+              <Icon id="cup-hot" width={20} height={20} />
               Kitchen
             </span>
           )}

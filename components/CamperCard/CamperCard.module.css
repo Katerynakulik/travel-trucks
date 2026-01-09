@@ -107,6 +107,7 @@
 }
 
 /* Кнопка сердечка */
+
 .favoriteBtn {
   background: none;
   border: none;
@@ -114,16 +115,17 @@
   padding: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: transform 0.2s, color 0.2s ease;
-  color: var(--main-dark);
 }
 
-.favoriteBtn:hover {
-  transform: scale(1.1);
+.heartDefault {
+  fill: none;
+  stroke: var(--main-dark);
+  transition: stroke 0.3s ease;
 }
-.favoriteBtn.active {
-  color: var(--main-red);
+
+.heartActive {
+  fill: var(--main-red);
+  stroke: var(--main-red);
 }
 .button {
   display: inline-block;
