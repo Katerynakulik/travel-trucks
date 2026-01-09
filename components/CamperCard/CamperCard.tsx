@@ -37,7 +37,7 @@ export const CamperCard = ({ camper }: { camper: any }) => {
             <div className={styles.priceRow}>
               <span className={styles.price}>€{camper.price.toFixed(2)}</span>
               <button className={styles.favoriteBtn}>
-                <Icon id="heart" width={24} height={24} />
+                <Icon id="heart" width={26} height={24} />
               </button>
             </div>
           </div>
