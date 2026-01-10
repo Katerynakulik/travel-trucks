@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-muted);
+  opacity: 0.6;
+}
+
+.inputWrapper {
+  position: relative; /* Робимо контейнер відправною точкою для іконки */
+  display: flex;
+  align-items: center;
+}
+
+.iconDefault,
+.iconActive {
+  position: absolute;
+  left: 18px; /* Відступ іконки від лівого краю */
+  pointer-events: none; /* Щоб клік по іконці проходив крізь неї в інпут */
+  transition: fill 0.3s ease;
+}
+
+.iconDefault {
+  fill: var(--gray-muted); /* Твій колір для неактивного стану */
+}
+
+.iconActive {
+  fill: var(--main-dark); /* Твій колір для активного стану */
+}
+
+.input {
+  width: 100%;
+  padding: 18px 18px 18px 48px; /* Лівий педінг 48px звільняє місце для іконки */
+  background-color: var(--gray-light);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 16px;
+  color: var(--main-dark);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: var(--main-dark);
+}
+
+.input::placeholder {
+  color: var(--gray-muted);
+  opacity: 0.6;
+}

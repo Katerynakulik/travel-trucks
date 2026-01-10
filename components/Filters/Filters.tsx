@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "../Icon/Icon";
 import styles from "./Filters.module.css";
+import { LocationFilter } from "../LocationFilter/LocationFilter";
 
 export const Filters = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [location, setLocation] = useState(searchParams.get("location") || "");
 
   // Локальний стан для кнопок (checkbox logic)
   const [equipment, setEquipment] = useState({
@@ -22,7 +26,7 @@ export const Filters = () => {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-
+    if (location) params.set("location", location);
     // Додаємо тип, якщо обраний
     if (type) params.set("form", type);
 
@@ -39,6 +43,7 @@ export const Filters = () => {
 
   return (
     <aside className={styles.filtersSide}>
+      <LocationFilter value={location} onChange={setLocation} />
       <div className={styles.section}>
         <h3 className={styles.subTitle}>Vehicle equipment</h3>
         <hr className={styles.divider} />
