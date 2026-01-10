@@ -33,10 +33,10 @@ export const useCamperStore = create<CamperState>()(
           );
           if (!res.ok) throw new Error("Not found");
           const data = await res.json();
-          set({ currentCamper: data });
+          set({ currentCamper: data, isLoading: false });
         } catch (error) {
           console.error(error);
-          set({ currentCamper: null });
+          set({ currentCamper: null, isLoading: false });
         } finally {
           set({ isLoading: false });
         }

@@ -1,15 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useCamperStore } from "@/store/useCamperStore";
 import { Icon } from "../Icon/Icon";
 import styles from "./CamperDetailsContent.module.css";
 
-export default function CamperDetailsContent({ id }: { id: string }) {
+interface CamperDetailsContentProps {
+  id: string;
+}
+
+export default function CamperDetailsContent({
+  id,
+}: CamperDetailsContentProps) {
   const [activeTab, setActiveTab] = useState<"features" | "reviews">(
     "features"
   );
 
+  // Стан для форми бронювання
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    date: "",
+    comment: "",
+  });
+
+  // Отримуємо дані та екшени із Zustand
   const {
     currentCamper: camper,
     isLoading,
@@ -22,12 +38,27 @@ export default function CamperDetailsContent({ id }: { id: string }) {
     }
   }, [id, fetchCamperById]);
 
-  if (isLoading) return <p className={styles.loader}>Loading...</p>;
+  // Обробка відправки форми
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Емуляція успішного запиту
+    toast.success("Booking request sent successfully!", {
+      duration: 4000,
+      position: "top-right",
+    });
+
+    // Очищення полів
+    setFormData({ name: "", email: "", date: "", comment: "" });
+  };
+
+  if (isLoading)
+    return <p className={styles.loader}>Loading camper details...</p>;
   if (!camper) return null;
 
   return (
     <div className={styles.wrapper}>
-      {/* Title Section */}
+      {/* Title Section (Семантично коректно замість header) */}
       <div className={styles.titleSection}>
         <h1 className={styles.name}>{camper.name}</h1>
         <div className={styles.meta}>
@@ -43,13 +74,13 @@ export default function CamperDetailsContent({ id }: { id: string }) {
         <p className={styles.price}>€{Number(camper.price || 0).toFixed(2)}</p>
       </div>
 
-      {/* Gallery */}
+      {/* Gallery Section */}
       <section className={styles.gallery}>
         {camper.gallery?.map((img: any, index: number) => (
           <div key={index} className={styles.imgWrapper}>
             <img
               src={img.original || img.thumb}
-              alt={camper.name}
+              alt={`${camper.name} view ${index + 1}`}
               className={styles.image}
             />
           </div>
@@ -58,9 +89,10 @@ export default function CamperDetailsContent({ id }: { id: string }) {
 
       <p className={styles.description}>{camper.description}</p>
 
-      {/* Tabs */}
+      {/* Tabs Navigation */}
       <div className={styles.tabs}>
         <button
+          type="button"
           className={`${styles.tab} ${
             activeTab === "features" ? styles.activeTab : ""
           }`}
@@ -69,6 +101,7 @@ export default function CamperDetailsContent({ id }: { id: string }) {
           Features
         </button>
         <button
+          type="button"
           className={`${styles.tab} ${
             activeTab === "reviews" ? styles.activeTab : ""
           }`}
@@ -79,11 +112,10 @@ export default function CamperDetailsContent({ id }: { id: string }) {
       </div>
 
       <div className={styles.bottomSection}>
-        {/* Left Column: Features or Reviews */}
+        {/* Left Column: Tab Content */}
         <div className={styles.tabContent}>
           {activeTab === "features" ? (
             <div className={styles.featuresWrapper}>
-              {/* Feature Tags */}
               <div className={styles.featureTags}>
                 <span className={styles.tag}>
                   <Icon id="diagram" width={20} height={20} />
@@ -111,7 +143,6 @@ export default function CamperDetailsContent({ id }: { id: string }) {
                 )}
               </div>
 
-              {/* Vehicle Details Table */}
               <div className={styles.detailsTable}>
                 <h3 className={styles.detailsTitle}>Vehicle details</h3>
                 <hr className={styles.divider} />
@@ -175,28 +206,44 @@ export default function CamperDetailsContent({ id }: { id: string }) {
           <p className={styles.formSubtitle}>
             Stay connected! We are always ready to help you.
           </p>
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+          <form className={styles.form} onSubmit={handleBookingSubmit}>
             <input
               type="text"
               placeholder="Name*"
               className={styles.input}
               required
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
             <input
               type="email"
               placeholder="Email*"
               className={styles.input}
               required
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <input
               type="text"
               placeholder="Booking date*"
               className={styles.input}
               required
+              value={formData.date}
+              onChange={(e) =>
+                setFormData({ ...formData, date: e.target.value })
+              }
             />
             <textarea
               placeholder="Comment"
               className={styles.textarea}
+              value={formData.comment}
+              onChange={(e) =>
+                setFormData({ ...formData, comment: e.target.value })
+              }
             ></textarea>
             <button type="submit" className={styles.submitBtn}>
               Send
