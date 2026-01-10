@@ -254,3 +254,37 @@
 .submitBtn:hover {
   background-color: var(--main-red-hover);
 }
+
+.datePickerWrapper {
+  width: 100%;
+}
+
+/* Обгортка для календаря */
+.datePickerWrapper {
+  width: 100%;
+}
+
+.datePickerWrapper :global(.react-datepicker-wrapper) {
+  width: 100%;
+}
+
+/* Підсвітка обраного діапазону (червоним під макет) */
+.datePickerWrapper :global(.react-datepicker__day--selected),
+.datePickerWrapper :global(.react-datepicker__day--in-selecting-range),
+.datePickerWrapper :global(.react-datepicker__day--in-range) {
+  background-color: var(--main-red) !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+/* Колір "хвоста" при наведенні */
+.datePickerWrapper :global(.react-datepicker__day--keyboard-selected) {
+  background-color: rgba(232, 77, 77, 0.2);
+  color: var(--main-red);
+}
+
+/* Стиль хедера календаря */
+.datePickerWrapper :global(.react-datepicker__header) {
+  background-color: white;
+  border-bottom: 1px solid var(--border-color);
+}

@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import { useCamperStore } from "@/store/useCamperStore";
 import { Icon } from "../Icon/Icon";
 import styles from "./CamperDetailsContent.module.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface CamperDetailsContentProps {
   id: string;
@@ -38,17 +40,21 @@ export default function CamperDetailsContent({
     }
   }, [id, fetchCamperById]);
 
+  // Функція зміни дат
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    setFormData({ ...formData, startDate: start, endDate: end });
+  };
+
   // Обробка відправки форми
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Емуляція успішного запиту
     toast.success("Booking request sent successfully!", {
-      duration: 4000,
+      duration: 3000,
       position: "top-right",
     });
 
-    // Очищення полів
     setFormData({ name: "", email: "", date: "", comment: "" });
   };
 
@@ -227,16 +233,23 @@ export default function CamperDetailsContent({
                 setFormData({ ...formData, email: e.target.value })
               }
             />
-            <input
-              type="text"
-              placeholder="Booking date*"
-              className={styles.input}
-              required
-              value={formData.date}
-              onChange={(e) =>
-                setFormData({ ...formData, date: e.target.value })
-              }
-            />
+
+            {/* Календар для вибору ПЕРІОДУ (Range) */}
+            <div className={styles.datePickerWrapper}>
+              <DatePicker
+                selectsRange={true}
+                startDate={formData.startDate}
+                endDate={formData.endDate}
+                onChange={handleDateChange}
+                minDate={new Date()}
+                placeholderText="Booking period*"
+                className={styles.input}
+                dateFormat="dd/MM/yyyy"
+                required
+                isClearable={true}
+              />
+            </div>
+
             <textarea
               placeholder="Comment"
               className={styles.textarea}
