@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 interface CamperState {
   items: any[];
+  currentCamper: any | null;
   total: number;
   favorites: string[]; // Масив ID обраних кемперів
   isLoading: boolean;
@@ -13,16 +14,33 @@ interface CamperState {
   toggleFavorite: (id: string) => void;
   setLoading: (status: boolean) => void;
   resetItems: () => void;
+  fetchCamperById: (id: string) => Promise<void>;
 }
 
 export const useCamperStore = create<CamperState>()(
   persist(
     (set) => ({
       items: [],
+      currentCamper: null,
       total: 0,
       favorites: [],
       isLoading: false,
-
+      fetchCamperById: async (id: string) => {
+        set({ isLoading: true, currentCamper: null }); // Скидаємо перед завантаженням
+        try {
+          const res = await fetch(
+            `https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers/${id}`
+          );
+          if (!res.ok) throw new Error("Not found");
+          const data = await res.json();
+          set({ currentCamper: data });
+        } catch (error) {
+          console.error(error);
+          set({ currentCamper: null });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
       setItems: (newItems, isNewSearch) =>
         set((state) => ({
           items: isNewSearch ? newItems : [...state.items, ...newItems],
