@@ -1,3 +1,4 @@
+// components/CamperList/CamperList.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,60 +9,49 @@ import styles from "./CamperList.module.css";
 
 export const CamperList = () => {
   const searchParams = useSearchParams();
-  const LIMIT = 4;
-  const [page, setPage] = useState(1);
-
-  // Отримуємо тільки те, що треба для відображення
   const { items, total, isLoading, fetchCampers } = useCamperStore();
-  const safeItems = Array.isArray(items) ? items : [];
-  // Перетворюємо searchParams в об'єкт для передачі в стор
-  const filters = Object.fromEntries(searchParams.entries());
 
+  // Локальний стан для сторінки
+  const [page, setPage] = useState(1);
+  const limit = 4;
+
+  // 1. Скидаємо сторінку при зміні фільтрів (URL)
   useEffect(() => {
     setPage(1);
-    fetchCampers({
-      page: 1,
-      limit: LIMIT,
-      isNewSearch: true,
-      ...filters,
-    });
+    const filters = Object.fromEntries(searchParams.entries());
+    fetchCampers({ page: 1, limit, isNewSearch: true, ...filters });
   }, [searchParams, fetchCampers]);
 
-  useEffect(() => {
-    if (page > 1) {
-      fetchCampers({
-        page: 1,
-        limit: LIMIT,
-        isNewSearch: true,
-        ...filters,
-      });
-    }
-  }, [page, fetchCampers]);
+  // 2. Функція для завантаження наступної сторінки
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
 
-  const hasMore = items.length === page * LIMIT;
-  const noItemsFound = !isLoading && items.length === 0;
+    // Отримуємо поточні фільтри з URL, щоб не загубити їх при пагінації
+    const filters = Object.fromEntries(searchParams.entries());
+
+    fetchCampers({
+      page: nextPage,
+      limit,
+      isNewSearch: false, // ВАЖЛИВО: додаємо до існуючого списку
+      ...filters,
+    });
+  };
+
+  const hasMore = items.length < total;
 
   return (
     <div className={styles.container}>
-      {!isLoading && safeItems.length === 0 && (
-        <div className={styles.noResults}>
-          <p>No campers found matching your filters.</p>
-        </div>
-      )}
-
       <div className={styles.list}>
-        {safeItems.map((camper) => (
+        {items.map((camper) => (
           <CamperCard key={camper.id} camper={camper} />
         ))}
       </div>
 
       {isLoading && <p>Loading...</p>}
 
-      {hasMore && !isLoading && (
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          className={styles.loadMoreBtn}
-        >
+      {!isLoading && hasMore && (
+        <button className={styles.loadMore} onClick={handleLoadMore}>
           Load more
         </button>
       )}

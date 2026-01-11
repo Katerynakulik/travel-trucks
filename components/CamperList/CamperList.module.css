@@ -13,7 +13,7 @@
   margin-bottom: 64px;
 }
 
-.loadMoreBtn {
+.loadMore {
   padding: 16px 32px;
   background-color: transparent;
   border: 1px solid var(--border-color);
@@ -25,7 +25,7 @@
   color: var(--main-dark);
 }
 
-.loadMoreBtn:hover {
+.loadMore:hover {
   border-color: var(--main-red-hover);
 }
 

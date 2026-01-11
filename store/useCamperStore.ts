@@ -36,21 +36,22 @@ export const useCamperStore = create<CamperState>()(
       isLoading: false,
 
       // 1. Завантаження списку кемперів (з фільтрами та пагінацією)
+      // store/useCamperStore.ts
+
       fetchCampers: async ({
         page,
         limit,
-        isNewSearch = false, // Витягуємо це окремо
-        ...filters // Тут залишаться ТІЛЬКИ фільтри для API
+        isNewSearch = false, // Витягуємо окремо, щоб не пішло в URL
+        ...filters // Тут залишаються тільки фільтри для API
       }) => {
         set({ isLoading: true });
 
         try {
           const url = new URL(BASE_URL);
-
           url.searchParams.set("page", String(page));
           url.searchParams.set("limit", String(limit));
 
-          // Додаємо тільки ті фільтри, які реально існують у базі
+          // Додаємо тільки валідні фільтри
           Object.entries(filters).forEach(([key, value]) => {
             if (
               value !== "" &&
@@ -61,8 +62,6 @@ export const useCamperStore = create<CamperState>()(
               url.searchParams.set(key, String(value));
             }
           });
-
-          console.log("🔗 Clean Request URL:", url.toString());
 
           const res = await fetch(url.toString());
 
@@ -75,9 +74,8 @@ export const useCamperStore = create<CamperState>()(
 
           const data = await res.json();
 
-          // ГАРАНТІЯ: MockAPI може повернути масив або об'єкт з items
+          // Гарантуємо, що записано масив
           const fetchedItems = Array.isArray(data) ? data : data.items || [];
-          // Для MockAPI total зазвичай 32, якщо він не повертає його явно
           const totalCount = data.total || 32;
 
           set((state) => ({
