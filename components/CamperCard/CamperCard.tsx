@@ -19,14 +19,16 @@ export const CamperCard = ({ camper }: CamperCardProps) => {
   const formIcons: Record<string, string> = {
     alcove: "bi_grid-3x3-gap",
     fullyIntegrated: "bi_grid",
-    van: "bi_grid-1x2",
+    panelTruck: "bi_grid-1x2",
   };
 
   const formatForm = (form: string) => {
-    if (form === "alcove") return "Alcove";
-    if (form === "fullyIntegrated") return "Fully Integrated";
-    if (form === "van") return "Van";
-    return form;
+    const labels: Record<string, string> = {
+      alcove: "Alcove",
+      fullyIntegrated: "Fully Integrated",
+      panelTruck: "Van",
+    };
+    return labels[form] || form;
   };
 
   return (
@@ -80,7 +82,7 @@ export const CamperCard = ({ camper }: CamperCardProps) => {
         <p className={styles.description}>{camper.description}</p>
 
         <div className={styles.features}>
-          {/* Тип кузова (Повернуто на місце) */}
+          {/* Тип кузова  */}
           <span className={styles.tag}>
             <Icon id={formIcons[camper.form]} width={20} height={20} />
             {formatForm(camper.form)}

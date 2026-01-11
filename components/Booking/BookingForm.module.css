@@ -1,0 +1,78 @@
+.bookingCard {
+  padding: 24px;
+  border: 1px solid #dadde1;
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #475467;
+  margin-bottom: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 18px;
+  background-color: #f7f7f7;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.textarea {
+  height: 114px;
+  resize: none;
+}
+
+/* Робимо календар поп-апом, який не соває верстку */
+.datePickerWrapper :global(.react-datepicker-popper) {
+  z-index: 5;
+}
+
+/* Прибираємо червоні квадрати на стрілках */
+.datePickerWrapper :global(.react-datepicker__navigation--previous),
+.datePickerWrapper :global(.react-datepicker__navigation--next) {
+  border: none;
+  background: none;
+  top: 14px;
+}
+
+/* Стиль для обраної дати (червоне коло як у дизайні) */
+.datePickerWrapper :global(.react-datepicker__day--selected) {
+  background-color: #e44848 !important;
+  border-radius: 50%;
+  color: white !important;
+}
+
+/* Інпут календаря має виглядати як інші */
+.datePickerWrapper input {
+  width: 100%;
+  padding: 18px;
+  background-color: #f7f7f7;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+.submitBtn {
+  padding: 16px 60px;
+  background-color: #e44848;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+}

@@ -6,6 +6,11 @@ import { Icon } from "../Icon/Icon";
 import styles from "./Filters.module.css";
 import { LocationFilter } from "../LocationFilter/LocationFilter";
 
+const VEHICLE_TYPES = [
+  { id: "panelTruck", label: "Van" },
+  { id: "fullyIntegrated", label: "Fully Integrated" },
+  { id: "alcove", label: "Alcove" },
+];
 export const Filters = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,6 +49,7 @@ export const Filters = () => {
   return (
     <aside className={styles.filtersSide}>
       <LocationFilter value={location} onChange={setLocation} />
+      {/* Vehicle equipment section */}
       <div className={styles.section}>
         <h3 className={styles.subTitle}>Vehicle equipment</h3>
         <hr className={styles.divider} />
@@ -76,38 +82,41 @@ export const Filters = () => {
                 height={32}
               />
               <span className={styles.btnText}>
-                {key === "transmission" ? "Automatic" : key}
+                {key === "transmission" ? "Automatic" : key.toUpperCase()}
               </span>
             </button>
           ))}
         </div>
       </div>
 
+      {/* Vehicle type section */}
       <div className={styles.section}>
         <h3 className={styles.subTitle}>Vehicle type</h3>
         <hr className={styles.divider} />
         <div className={styles.categoriesGrid}>
-          {["van", "fullyIntegrated", "alcove"].map((vType) => (
+          {VEHICLE_TYPES.map((vType) => (
             <button
-              key={vType}
+              key={vType.id}
               type="button"
               className={`${styles.filterBtn} ${
-                type === vType ? styles.active : ""
+                type === vType.id ? styles.active : ""
               }`}
-              onClick={() => setType((prev) => (prev === vType ? "" : vType))}
+              onClick={() =>
+                setType((prev) => (prev === vType.id ? "" : vType.id))
+              }
             >
               <Icon
                 id={
-                  vType === "van"
+                  vType.id === "panelTruck"
                     ? "bi_grid-1x2"
-                    : vType === "fullyIntegrated"
+                    : vType.id === "fullyIntegrated"
                     ? "bi_grid"
                     : "bi_grid-3x3-gap"
                 }
                 width={32}
                 height={32}
               />
-              <span className={styles.btnText}>{vType}</span>
+              <span className={styles.btnText}>{vType.label}</span>
             </button>
           ))}
         </div>

@@ -1,290 +1,63 @@
 .wrapper {
+  padding: 40px;
   max-width: 1440px;
   margin: 0 auto;
 }
 
-.loader {
-  text-align: center;
-  font-size: 20px;
-  margin-top: 50px;
+.contentLayout {
+  display: grid;
+  grid-template-columns: 1fr 448px; /* Ліва частина гнучка, права — фіксована */
+  gap: 40px;
+  align-items: start;
 }
 
-/* Title Section */
-.titleSection {
-  margin-bottom: 28px;
-}
-
-.name {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--main-dark);
-}
-
-.meta {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  text-decoration: underline;
-}
-
-.location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.price {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--main-dark);
-}
-
-/* Gallery */
 .gallery {
   display: flex;
   gap: 16px;
   margin-bottom: 28px;
-  overflow-x: auto;
 }
 
-.imgWrapper {
-  flex: 0 0 290px;
+.imageThumb {
+  width: calc(25% - 12px);
   height: 310px;
-  border-radius: 10px;
-  overflow: hidden;
 }
 
-.image {
+.imageThumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
 }
 
-.description {
-  line-height: 1.5;
-  color: var(--gray-muted);
-  margin-bottom: 44px;
-}
-
-/* Tabs */
 .tabs {
   display: flex;
   gap: 40px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #e1e1e1;
   margin-bottom: 44px;
 }
 
 .tab {
-  padding-bottom: 24px;
-  font-weight: 600;
-  font-size: 20px;
+  padding: 10px 0;
   background: none;
   border: none;
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
   position: relative;
-  color: var(--main-dark);
 }
 
 .activeTab::after {
   content: "";
   position: absolute;
-  bottom: -2px;
+  bottom: -1px;
   left: 0;
   width: 100%;
   height: 5px;
-  background-color: var(--main-red);
+  background-color: #e44848;
 }
 
-/* Layout Columns */
-.bottomSection {
-  display: flex;
-  gap: 64px;
-  align-items: flex-start;
-}
-
-.tabContent {
-  flex: 1;
-}
-
-/* Features Content */
-.featuresWrapper {
-  background-color: var(--gray-light);
-  padding: 44px;
-  border-radius: 10px;
-}
-
-.featureTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.description {
   margin-bottom: 44px;
-}
-
-.tag {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background-color: var(--white);
-  border-radius: 100px;
-  font-weight: 500;
-}
-
-.detailsTitle {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
-.divider {
-  border: none;
-  border-top: 1px solid var(--border-color);
-  margin-bottom: 24px;
-}
-
-.detailRow {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.capitalize {
-  text-transform: capitalize;
-}
-
-/* Reviews List */
-.reviewItem {
-  margin-bottom: 40px;
-}
-
-.reviewHeader {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-  background-color: var(--gray-light);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--main-red);
-}
-
-.reviewerName {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.reviewComment {
-  color: var(--gray-muted);
+  color: #475467;
   line-height: 1.5;
-}
-
-/* Booking Form Side */
-.bookingFormWrapper {
-  width: 448px;
-  padding: 44px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-}
-
-.formTitle {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.formSubtitle {
-  color: var(--gray-muted);
-  margin-bottom: 24px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.input,
-.textarea {
-  width: 100%;
-  padding: 18px;
-  background-color: var(--gray-light);
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
-}
-
-.textarea {
-  height: 114px;
-  resize: none;
-}
-
-.submitBtn {
-  background-color: var(--main-red);
-  color: var(--white);
-  padding: 16px 60px;
-  border-radius: 200px;
-  border: none;
-  font-weight: 500;
-  font-size: 16px;
-  cursor: pointer;
-  width: fit-content;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
-}
-
-.submitBtn:hover {
-  background-color: var(--main-red-hover);
-}
-
-.datePickerWrapper {
-  width: 100%;
-}
-
-/* Обгортка для календаря */
-.datePickerWrapper {
-  width: 100%;
-}
-
-.datePickerWrapper :global(.react-datepicker-wrapper) {
-  width: 100%;
-}
-
-/* Підсвітка обраного діапазону (червоним під макет) */
-.datePickerWrapper :global(.react-datepicker__day--selected),
-.datePickerWrapper :global(.react-datepicker__day--in-selecting-range),
-.datePickerWrapper :global(.react-datepicker__day--in-range) {
-  background-color: var(--main-red) !important;
-  color: white !important;
-  border-radius: 4px;
-}
-
-/* Колір "хвоста" при наведенні */
-.datePickerWrapper :global(.react-datepicker__day--keyboard-selected) {
-  background-color: rgba(232, 77, 77, 0.2);
-  color: var(--main-red);
-}
-
-/* Стиль хедера календаря */
-.datePickerWrapper :global(.react-datepicker__header) {
-  background-color: white;
-  border-bottom: 1px solid var(--border-color);
 }

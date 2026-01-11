@@ -5,42 +5,94 @@ interface CamperState {
   items: any[];
   currentCamper: any | null;
   total: number;
-  favorites: string[]; // Масив ID обраних кемперів
+  favorites: string[];
   isLoading: boolean;
 
-  // Екшени
+  // Екшени для даних
+  fetchCampers: (params: {
+    page: number;
+    limit: number;
+    [key: string]: any;
+  }) => Promise<void>;
+  fetchCamperById: (id: string) => Promise<void>;
+
+  // Допоміжні екшени
+  toggleFavorite: (id: string) => void;
+  resetItems: () => void;
+  setLoading: (status: boolean) => void;
   setItems: (items: any[], isNewSearch: boolean) => void;
   setTotal: (total: number) => void;
-  toggleFavorite: (id: string) => void;
-  setLoading: (status: boolean) => void;
-  resetItems: () => void;
-  fetchCamperById: (id: string) => Promise<void>;
 }
+
+const BASE_URL = "https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers";
 
 export const useCamperStore = create<CamperState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
       currentCamper: null,
       total: 0,
       favorites: [],
       isLoading: false,
-      fetchCamperById: async (id: string) => {
-        set({ isLoading: true, currentCamper: null }); // Скидаємо перед завантаженням
+
+      // 1. Завантаження списку кемперів (з фільтрами та пагінацією)
+      // store/useCamperStore.ts
+
+      fetchCampers: async ({ page, limit, ...filters }) => {
+        set({ isLoading: true });
+
         try {
-          const res = await fetch(
-            `https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers/${id}`
-          );
-          if (!res.ok) throw new Error("Not found");
+          const url = new URL(BASE_URL);
+
+          url.searchParams.set("page", String(page));
+          url.searchParams.set("limit", String(limit));
+
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value !== "" && value !== null && value !== undefined) {
+              url.searchParams.set(key, String(value));
+            }
+          });
+
+          const res = await fetch(url.toString());
+
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+
           const data = await res.json();
-          set({ currentCamper: data, isLoading: false });
-        } catch (error) {
-          console.error(error);
-          set({ currentCamper: null, isLoading: false });
+          set({ items: data, total: data.length });
+        } catch (error: any) {
+          console.error("❌ Fetch error details:", error.message);
         } finally {
           set({ isLoading: false });
         }
       },
+
+      // 2. Завантаження одного кемпера за ID
+      fetchCamperById: async (id: string) => {
+        set({ isLoading: true, currentCamper: null });
+        try {
+          const res = await fetch(`${BASE_URL}/${id}`);
+          if (!res.ok) throw new Error("Camper not found");
+          const data = await res.json();
+          set({ currentCamper: data });
+        } catch (error) {
+          console.error("Fetch one error:", error);
+          set({ currentCamper: null });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      // 3. Робота з обраним (LocalStorage)
+      toggleFavorite: (id) =>
+        set((state) => ({
+          favorites: state.favorites.includes(id)
+            ? state.favorites.filter((favId) => favId !== id)
+            : [...state.favorites, id],
+        })),
+
+      // Інші сетери (якщо знадобляться для ручного керування)
       setItems: (newItems, isNewSearch) =>
         set((state) => ({
           items: isNewSearch ? newItems : [...state.items, ...newItems],
@@ -51,18 +103,11 @@ export const useCamperStore = create<CamperState>()(
       setLoading: (status) => set({ isLoading: status }),
 
       resetItems: () => set({ items: [], total: 0 }),
-
-      toggleFavorite: (id) =>
-        set((state) => ({
-          favorites: state.favorites.includes(id)
-            ? state.favorites.filter((favId) => favId !== id)
-            : [...state.favorites, id],
-        })),
     }),
     {
-      name: "camper-storage", // Назва ключа в LocalStorage
+      name: "camper-storage",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ favorites: state.favorites }), // Зберігаємо ТІЛЬКИ обране
+      partialize: (state) => ({ favorites: state.favorites }), // Зберігаємо тільки масив ID
     }
   )
 );
