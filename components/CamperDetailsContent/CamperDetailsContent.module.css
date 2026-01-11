@@ -1,34 +1,71 @@
 .wrapper {
-  padding: 40px;
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 64px;
 }
 
-.contentLayout {
-  display: grid;
-  grid-template-columns: 1fr 448px; /* Ліва частина гнучка, права — фіксована */
-  gap: 40px;
-  align-items: start;
+.titleSection {
+  margin-bottom: 28px;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.33;
+  margin-bottom: 8px;
+}
+
+.meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.rating {
+  text-decoration: underline;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.33;
 }
 
 .gallery {
   display: flex;
   gap: 16px;
   margin-bottom: 28px;
+  overflow: hidden;
 }
 
 .imageThumb {
-  width: calc(25% - 12px);
-  height: 310px;
+  width: 290px;
+  height: 312px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .imageThumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
 }
 
+.description {
+  line-height: 1.5;
+  color: #475467;
+  margin-bottom: 44px;
+  max-width: 100%;
+}
+
+/* Tabs */
 .tabs {
   display: flex;
   gap: 40px;
@@ -37,13 +74,14 @@
 }
 
 .tab {
-  padding: 10px 0;
-  background: none;
-  border: none;
-  font-size: 18px;
+  padding-bottom: 24px;
   font-weight: 600;
+  font-size: 18px;
+  border: none;
+  background: none;
   cursor: pointer;
   position: relative;
+  color: #101828;
 }
 
 .activeTab::after {
@@ -56,8 +94,19 @@
   background-color: #e44848;
 }
 
-.description {
-  margin-bottom: 44px;
-  color: #475467;
-  line-height: 1.5;
+/* Layout */
+.contentLayout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.tabContent {
+  flex: 1;
+}
+
+.sidebar {
+  width: 448px;
+  position: sticky;
+  top: 20px;
 }

@@ -10,6 +10,8 @@ import { useCamperStore } from "@/store/useCamperStore";
 import styles from "./CamperDetailsContent.module.css";
 import { BookingForm } from "../Booking/BookingForm";
 import { Icon } from "../Icon/Icon";
+import { FeaturesTab } from "../FeaturesTab/FeaturesTab";
+import { ReviewsTab } from "../Reviews/ReviewsTab";
 
 export default function CamperDetailsContent({ id }: { id: string }) {
   const [activeTab, setActiveTab] = useState<"features" | "reviews">(
@@ -82,12 +84,11 @@ export default function CamperDetailsContent({ id }: { id: string }) {
       <div className={styles.contentLayout}>
         <div className={styles.tabContent}>
           {activeTab === "features" ? (
-            <div>{/* Тут буде FeaturesTab */}</div>
+            <FeaturesTab camper={camper} />
           ) : (
-            <div>{/* Тут буде ReviewsTab */}</div>
+            <ReviewsTab reviews={camper.reviews} />
           )}
         </div>
-
         <aside className={styles.sidebar}>
           <BookingForm />
         </aside>
