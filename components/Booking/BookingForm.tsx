@@ -82,8 +82,8 @@ export const BookingForm = () => {
         <div className={styles.datePickerWrapper}>
           <DatePicker
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            placeholderText="📅 Booking date*"
+            onChange={(date: Date | null) => setStartDate(date)}
+            placeholderText="Booking date*"
             className={styles.input}
             dateFormat="dd.MM.yyyy"
             required
