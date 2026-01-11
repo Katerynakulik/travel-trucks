@@ -3,10 +3,6 @@
 import { useEffect, useState } from "react";
 import { useCamperStore } from "@/store/useCamperStore";
 
-// Тимчасово залишимо ці компоненти тут або імпортуємо, якщо вже створили
-// import { CamperHeader } from "./CamperHeader";
-// import { CamperGallery } from "./CamperGallery";
-
 import styles from "./CamperDetailsContent.module.css";
 import { BookingForm } from "../Booking/BookingForm";
 import { Icon } from "../Icon/Icon";
