@@ -13,37 +13,47 @@ export const CamperList = () => {
 
   // Отримуємо тільки те, що треба для відображення
   const { items, total, isLoading, fetchCampers } = useCamperStore();
-
+  const safeItems = Array.isArray(items) ? items : [];
   // Перетворюємо searchParams в об'єкт для передачі в стор
   const filters = Object.fromEntries(searchParams.entries());
 
   useEffect(() => {
     setPage(1);
-    fetchCampers({ page: 1, limit: LIMIT, ...filters });
+    fetchCampers({
+      page: 1,
+      limit: LIMIT,
+      isNewSearch: true,
+      ...filters,
+    });
   }, [searchParams, fetchCampers]);
 
   useEffect(() => {
     if (page > 1) {
-      fetchCampers({ page, limit: LIMIT, ...filters });
+      fetchCampers({
+        page: 1,
+        limit: LIMIT,
+        isNewSearch: true,
+        ...filters,
+      });
     }
   }, [page, fetchCampers]);
 
-  const hasMore = items.length > 0 && items.length < total;
+  const hasMore = items.length === page * LIMIT;
   const noItemsFound = !isLoading && items.length === 0;
 
   return (
     <div className={styles.container}>
+      {!isLoading && safeItems.length === 0 && (
+        <div className={styles.noResults}>
+          <p>No campers found matching your filters.</p>
+        </div>
+      )}
+
       <div className={styles.list}>
-        {items.map((camper) => (
+        {safeItems.map((camper) => (
           <CamperCard key={camper.id} camper={camper} />
         ))}
       </div>
-
-      {noItemsFound && (
-        <p className={styles.noResults}>
-          No campers found matching your criteria.
-        </p>
-      )}
 
       {isLoading && <p>Loading...</p>}
 

@@ -36,9 +36,12 @@ export const useCamperStore = create<CamperState>()(
       isLoading: false,
 
       // 1. Завантаження списку кемперів (з фільтрами та пагінацією)
-      // store/useCamperStore.ts
-
-      fetchCampers: async ({ page, limit, ...filters }) => {
+      fetchCampers: async ({
+        page,
+        limit,
+        isNewSearch = false, // Витягуємо це окремо
+        ...filters // Тут залишаться ТІЛЬКИ фільтри для API
+      }) => {
         set({ isLoading: true });
 
         try {
@@ -47,22 +50,45 @@ export const useCamperStore = create<CamperState>()(
           url.searchParams.set("page", String(page));
           url.searchParams.set("limit", String(limit));
 
+          // Додаємо тільки ті фільтри, які реально існують у базі
           Object.entries(filters).forEach(([key, value]) => {
-            if (value !== "" && value !== null && value !== undefined) {
+            if (
+              value !== "" &&
+              value !== null &&
+              value !== undefined &&
+              value !== false
+            ) {
               url.searchParams.set(key, String(value));
             }
           });
 
+          console.log("🔗 Clean Request URL:", url.toString());
+
           const res = await fetch(url.toString());
 
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
+          if (res.status === 404) {
+            if (isNewSearch) set({ items: [], total: 0 });
+            return;
           }
 
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
           const data = await res.json();
-          set({ items: data, total: data.length });
+
+          // ГАРАНТІЯ: MockAPI може повернути масив або об'єкт з items
+          const fetchedItems = Array.isArray(data) ? data : data.items || [];
+          // Для MockAPI total зазвичай 32, якщо він не повертає його явно
+          const totalCount = data.total || 32;
+
+          set((state) => ({
+            items: isNewSearch
+              ? fetchedItems
+              : [...state.items, ...fetchedItems],
+            total: isNewSearch ? totalCount : state.total,
+          }));
         } catch (error: any) {
-          console.error("❌ Fetch error details:", error.message);
+          console.error("❌ Fetch error:", error.message);
+          if (isNewSearch) set({ items: [], total: 0 });
         } finally {
           set({ isLoading: false });
         }

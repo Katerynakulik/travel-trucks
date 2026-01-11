@@ -84,7 +84,11 @@ export const CamperCard = ({ camper }: CamperCardProps) => {
         <div className={styles.features}>
           {/* Тип кузова  */}
           <span className={styles.tag}>
-            <Icon id={formIcons[camper.form]} width={20} height={20} />
+            <Icon
+              id={formIcons[camper.form] || "bi_grid-1x2"}
+              width={20}
+              height={20}
+            />
             {formatForm(camper.form)}
           </span>
 
