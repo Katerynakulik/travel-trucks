@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚐 TravelTrucks
 
-## Getting Started
+**TravelTrucks** — це сучасна веб-платформа для пошуку та бронювання кемперів по всій Україні. Додаток дозволяє користувачам переглядати каталог транспортних засобів, фільтрувати їх за технічними характеристиками, додавати в "Обране" та здійснювати миттєве бронювання.
 
-First, run the development server:
+[**🔗 Живий демо-перегляд**](https://travel-trucks-sooty-nu.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚡ Performance & Quality
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Проєкт демонструє високі показники продуктивності та оптимізації згідно з Google Lighthouse:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **SEO:** 100/100
+- **Best Practices:** 100/100
+- **Accessibility:** 96/100
+- **Performance:** 82/100 (Оптимізовано для швидкого рендерингу)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Технологічний стек
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework:** Next.js 16.1.1 (App Router) — використання найновішої версії з підтримкою **Turbopack**.
+- **Language:** TypeScript (Strict Mode).
+- **State Management:** Zustand (з використанням `persist` для збереження обраних кемперів).
+- **HTTP Client:** Axios.
+- **Styling:** CSS Modules (Scoping).
+- **Date Management:** `react-datepicker`.
+- **Notifications:** `react-hot-toast`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🌟 Основні функції
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 1. Каталог та Фільтрація
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Backend Filtering:** Усі фільтри (локація, тип кузова, обладнання) обробляються на стороні бекенду.
+- **Load More:** Пагінація реалізована через дозавантаження карток без втрати попереднього стану.
+- **Favorites:** Додавання кемперів у список обраних зі збереженням даних після оновлення сторінки.
+
+### 2. Детальна сторінка (`/catalog/:id`)
+
+- **Динамічні метадані:** Кожна сторінка має унікальний `title` та `description` для кращого SEO.
+- **Система вкладок:** \* **Features:** Технічні деталі (engine, transmission, form, tank тощо).
+  - **Reviews:** Відгуки користувачів із візуальним рейтингом (5-зіркова шкала).
+- **Динамічні іконки:** Автоматичне відображення іконок залежно від типу пального (`diesel`, `petrol`) та обладнання.
+
+### 3. Бронювання
+
+- Інтерактивна форма з календарем.
+- Нотифікація користувача про успішне завершення бронювання.
+
+---
+
+## 🏗 Архітектура
+
+- **Компонентний підхід:** Розділення логіки на чисті компоненти (UI, Layout, Shared).
+- **SVG Sprite:** Використання єдиного спрайту для всіх іконок (оптимізація запитів).
+- **Metadata API:** Використання вбудованих інструментів Next.js 16 для керування заголовками та SEO-тегами.
+
+---
+
+## 📦 Встановлення та запуск
+
+1.  **Клонуйте репозиторій:**
+
+    ```bash
+    git clone [https://github.com/Katerynakulik/travel-trucks.git](https://github.com/Katerynakulik/travel-trucks.git)
+    cd travel-trucks
+    ```
+
+2.  **Встановіть залежності:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Запустіть режим розробки (Turbopack):**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 👤 Автор
+
+**Катерина Кулик** [GitHub Profile](https://github.com/Katerynakulik)
+
+---
+
+_Проєкт виконано згідно з технічним завданням для платформи TravelTrucks._
