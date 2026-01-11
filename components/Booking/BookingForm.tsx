@@ -4,12 +4,15 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast, { Toaster } from "react-hot-toast";
-
 import styles from "./BookingForm.module.css";
-import { Icon } from "../Icon/Icon";
 
 export const BookingForm = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [startDate, endDate] = dateRange;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -20,9 +23,9 @@ export const BookingForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Проста валідація дати (DatePicker required не завжди спрацьовує візуально)
-    if (!startDate) {
-      toast.error("Please select a booking date");
+    // Перевірка, чи обрано повний період
+    if (!startDate || !endDate) {
+      toast.error("Please select a booking period (start and end date)");
       return;
     }
 
@@ -32,18 +35,17 @@ export const BookingForm = () => {
       // Імітація запиту до API
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      console.log("Booking Data:", { ...formData, date: startDate });
+      console.log("Booking Data:", {
+        ...formData,
+        startDate,
+        endDate,
+      });
 
-      // Повідомлення про успіх
-      toast.success("Booking successful! We will contact you soon.");
+      toast.success("Booking successful!");
 
-      // Очищення форми
+      // Очищення форми без перезавантаження сторінки
       setFormData({ name: "", email: "", comment: "" });
-      setStartDate(null);
-      (e.target as HTMLFormElement).reset();
-
-      // Перезавантаження сторінки (якщо потрібно за ТЗ)
-      setTimeout(() => window.location.reload(), 2000);
+      setDateRange([null, null]);
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -53,7 +55,6 @@ export const BookingForm = () => {
 
   return (
     <div className={styles.bookingCard}>
-      {/* Контейнер для сповіщень */}
       <Toaster position="top-center" reverseOrder={false} />
 
       <h3 className={styles.title}>Book your campervan now</h3>
@@ -80,15 +81,21 @@ export const BookingForm = () => {
         />
 
         <div className={styles.datePickerWrapper}>
+          {/* 2. Налаштовуємо DatePicker для вибору діапазону */}
           <DatePicker
-            selected={startDate}
-            onChange={(date: Date | null) => setStartDate(date)}
-            placeholderText="Booking date*"
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update: [Date | null, Date | null]) => {
+              setDateRange(update);
+            }}
+            placeholderText="Booking period*"
             className={styles.input}
             dateFormat="dd.MM.yyyy"
-            required
             minDate={new Date()}
             autoComplete="off"
+            isClearable={true}
+            required
           />
         </div>
 

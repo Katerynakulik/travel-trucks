@@ -1,17 +1,20 @@
 .bookingCard {
   padding: 24px;
-  border: 1px solid #dadde1;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
 }
 
 .title {
   font-size: 20px;
   font-weight: 600;
+  line-height: 1.2;
   margin-bottom: 8px;
+  color: var(--main-dark);
 }
 
 .subtitle {
-  color: #475467;
+  color: var(--gray-muted);
+  font-size: 16px;
   margin-bottom: 24px;
 }
 
@@ -21,14 +24,25 @@
   gap: 14px;
 }
 
+/* Об'єднуємо всі текстові поля та інпут календаря */
 .input,
-.textarea {
+.textarea,
+.datePickerWrapper :global(.react-datepicker-wrapper) input {
   width: 100%;
   padding: 18px;
-  background-color: #f7f7f7;
+  background-color: var(--gray-light);
+  color: var(--main-dark);
   border: none;
   border-radius: 10px;
   font-size: 16px;
+  line-height: 1.25;
+  outline: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--gray-muted);
 }
 
 .textarea {
@@ -36,43 +50,68 @@
   resize: none;
 }
 
-/* Робимо календар поп-апом, який не соває верстку */
-.datePickerWrapper :global(.react-datepicker-popper) {
-  z-index: 5;
-}
+/* --- Налаштування DatePicker (Calendar) --- */
 
-/* Прибираємо червоні квадрати на стрілках */
-.datePickerWrapper :global(.react-datepicker__navigation--previous),
-.datePickerWrapper :global(.react-datepicker__navigation--next) {
-  border: none;
-  background: none;
-  top: 14px;
-}
-
-/* Стиль для обраної дати (червоне коло як у дизайні) */
-.datePickerWrapper :global(.react-datepicker__day--selected) {
-  background-color: #e44848 !important;
-  border-radius: 50%;
-  color: white !important;
-}
-
-/* Інпут календаря має виглядати як інші */
-.datePickerWrapper input {
+.datePickerWrapper {
   width: 100%;
-  padding: 18px;
-  background-color: #f7f7f7;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  outline: none;
 }
+
+.datePickerWrapper :global(.react-datepicker-popper) {
+  z-index: 10;
+  padding-top: 4px;
+}
+
+.datePickerWrapper :global(.react-datepicker) {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-family: inherit;
+  background-color: var(--white);
+}
+
+/* Стилізація обраного діапазону дат */
+.datePickerWrapper :global(.react-datepicker__day--selected),
+.datePickerWrapper :global(.react-datepicker__day--in-range),
+.datePickerWrapper :global(.react-datepicker__day--in-selecting-range) {
+  background-color: var(--main-red) !important;
+  color: var(--white) !important;
+  border-radius: 50% !important;
+}
+
+.datePickerWrapper :global(.react-datepicker__day--keyboard-selected) {
+  background-color: transparent;
+  color: var(--main-dark);
+}
+
+.datePickerWrapper :global(.react-datepicker__day:hover) {
+  border-radius: 50%;
+  background-color: var(--gray-light);
+}
+
+/* Навігація в календарі */
+.datePickerWrapper :global(.react-datepicker__navigation) {
+  top: 2px;
+}
+
+/* --- Кнопка Send --- */
+
 .submitBtn {
   padding: 16px 60px;
-  background-color: #e44848;
-  color: white;
+  background-color: var(--main-red);
+  color: var(--white);
   border: none;
   border-radius: 100px;
   font-weight: 500;
+  font-size: 16px;
   cursor: pointer;
   align-self: flex-start;
+  transition: background-color 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: var(--main-red-hover);
+}
+
+.submitBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
