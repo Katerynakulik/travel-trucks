@@ -9,6 +9,7 @@ import { useCamperStore } from "@/store/useCamperStore";
 
 import styles from "./CamperDetailsContent.module.css";
 import { BookingForm } from "../Booking/BookingForm";
+import { Icon } from "../Icon/Icon";
 
 export default function CamperDetailsContent({ id }: { id: string }) {
   const [activeTab, setActiveTab] = useState<"features" | "reviews">(
@@ -29,12 +30,22 @@ export default function CamperDetailsContent({ id }: { id: string }) {
 
   return (
     <div className={styles.wrapper}>
-      {/* 1. Header & Meta (Винесемо пізніше) */}
-      <section className={styles.header}>
+      <div className={styles.titleSection}>
         <h1 className={styles.name}>{camper.name}</h1>
-        {/* Тут буде рейтинг та локація */}
+
+        <div className={styles.meta}>
+          <span className={styles.rating}>
+            <span className={styles.starEmoji}>⭐</span>
+            {camper.rating} ({camper.reviews?.length} Reviews)
+          </span>
+          <span className={styles.location}>
+            <Icon id="map" width={16} height={16} />
+            {camper.location}
+          </span>
+        </div>
+
         <p className={styles.price}>€{Number(camper.price).toFixed(2)}</p>
-      </section>
+      </div>
 
       {/* 2. Gallery (Винесемо пізніше) */}
       <section className={styles.gallery}>
