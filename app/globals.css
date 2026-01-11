@@ -37,10 +37,9 @@ button {
   outline: none;
 }
 main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0 64px;
+  padding: 0;
 }
 
 .container {

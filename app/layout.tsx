@@ -9,6 +9,15 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "TravelTrucks",
   description: "Camper rental service",
+  keywords: ["camper rental", "travel trucks", "ukraine travel", "rent van"],
+  authors: [{ name: "Kateryna Kulik" }],
+  openGraph: {
+    title: "TravelTrucks - Adventure Awaits",
+    description: "Rent a camper and explore the world.",
+    url: "https://travel-trucks-sooty-nu.vercel.app/",
+    siteName: "TravelTrucks",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
